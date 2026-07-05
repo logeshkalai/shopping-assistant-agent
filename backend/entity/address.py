@@ -15,6 +15,7 @@ class UserAddress(db.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'address_id': self.id,
             'user_id': self.user_id,
             'label': self.label,

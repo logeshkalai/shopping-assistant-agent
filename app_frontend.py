@@ -9,7 +9,7 @@ def create_frontend_app():
                 static_folder=os.path.abspath('frontend'),
                 static_url_path='')
     
-    app.secret_key = 'frontend_secret_key'
+    app.secret_key = os.environ.get('SECRET_KEY') or 'frontend_secret_key'
     
     # UI Routes
     @app.route('/')
@@ -47,10 +47,16 @@ def create_frontend_app():
     def payment_page():
         return render_template('payment.html')
 
+    @app.route('/product-details')
+    @app.route('/product-details.html')
+    def product_details_page():
+        return render_template('product-details.html')
+
     # API Proxy Handler (Redirects to Backend Data Server on port 5000)
     @app.route('/api/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
     def proxy_api(path):
-        url = f"http://127.0.0.1:5000/api/{path}"
+        backend_url = os.environ.get('BACKEND_URL', 'http://127.0.0.1:5000')
+        url = f"{backend_url}/api/{path}"
         if request.query_string:
             url += f"?{request.query_string.decode('utf-8')}"
             
@@ -81,5 +87,7 @@ def create_frontend_app():
 
 if __name__ == '__main__':
     app = create_frontend_app()
-    print("Frontend UI Assets Web Server running on port 3000...")
-    app.run(host='127.0.0.1', port=3000, debug=True)
+    host = os.environ.get('FRONTEND_HOST', '127.0.0.1')
+    port = int(os.environ.get('FRONTEND_PORT', 3000))
+    print(f"Frontend UI Assets Web Server running on http://{host}:{port}...")
+    app.run(host=host, port=port, debug=True)

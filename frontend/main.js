@@ -626,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.product-title-click').forEach(title => {
             title.addEventListener('click', (e) => {
                 const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                window.open(`payment.html?product_id=${id}`, '_blank');
+                window.location.href = `product-details.html?id=${id}`;
             });
         });
     }
@@ -1810,12 +1810,286 @@ alert("An error occurred loading the product specifications.");
                      errorDiv.textContent = "An error occurred updating profile. Please try again.";
                      errorDiv.classList.remove('d-none');
                  } finally {
-                     submitBtn.disabled = false;
+submitBtn.disabled = false;
                      submitBtn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Save Changes';
                  }
              });
          }
-     }
+      }
+
+      // --- Product Details Page Initialization ---
+      if (pathMatches('product-details')) {
+          const urlParams = new URLSearchParams(window.location.search);
+          const productId = parseInt(urlParams.get('id'));
+          if (!productId) {
+              alert("No product selected.");
+              window.location.href = 'dashboard.html';
+              return;
+          }
+
+          let wishlistActive = false;
+
+          const loadProductFullDetails = async () => {
+              try {
+                  const res = await fetch(`/api/products/${productId}`);
+                  const product = await res.json();
+                  if (!product || product.success === false) {
+                      document.getElementById('product-details-container').innerHTML = '<div class="text-danger py-4 text-center">Failed to load product details.</div>';
+                      return;
+                  }
+
+                  // Render details
+                  document.getElementById('details-image').src = getProductImage(product.name, product.category);
+                  document.getElementById('details-brand').textContent = product.brand;
+                  document.getElementById('details-category-badge').textContent = product.category.toUpperCase();
+                  document.getElementById('details-name').textContent = product.name;
+                  document.getElementById('details-description-short').textContent = product.description || 'No description available.';
+                  document.getElementById('details-price').textContent = `₹${product.price.toLocaleString('en-IN')}`;
+
+                  // Stock Status
+                  const stockEl = document.getElementById('details-stock-status');
+                  if (product.stock > 0) {
+                      stockEl.innerHTML = `<span class="badge bg-success-glow text-success text-xs"><i class="bi bi-check-circle me-1"></i>In Stock (${product.stock} units available)</span>`;
+                  } else {
+                      stockEl.innerHTML = `<span class="badge bg-danger-glow text-danger text-xs"><i class="bi bi-x-circle me-1"></i>Out of Stock</span>`;
+                  }
+
+                  // Rating Stars
+                  const ratingVal = product.rating || 0.0;
+                  const starContainer = document.getElementById('details-rating-container');
+                  const reviewStarContainer = document.getElementById('details-review-stars');
+                  const avgRatingText = document.getElementById('details-review-avg-rating');
+                  
+                  if (starContainer) {
+                      starContainer.innerHTML = renderStars(ratingVal) + ` <span class="text-white fw-bold ms-2">${ratingVal.toFixed(1)}</span>`;
+                  }
+                  if (reviewStarContainer) {
+                      reviewStarContainer.innerHTML = renderStars(ratingVal);
+                  }
+                  if (avgRatingText) {
+                      avgRatingText.textContent = ratingVal.toFixed(1);
+                  }
+
+                  // Action Buttons Setup
+                  const buyBtn = document.getElementById('btn-details-buy');
+                  if (buyBtn) {
+                      buyBtn.href = `payment.html?product_id=${product.id}`;
+                  }
+
+                  // Specifications and Features
+                  const extra = getProductExtendedDetails(product);
+                  const specsTable = document.getElementById('details-specs-table');
+                  if (specsTable) {
+                      specsTable.innerHTML = '';
+                      for (const [key, val] of Object.entries(extra.specs)) {
+                          specsTable.innerHTML += `
+                              <tr>
+                                  <td class="text-secondary ps-3 py-2.5 text-capitalize" style="width: 35%;">${key}</td>
+                                  <td class="text-white fw-bold py-2.5">${val}</td>
+                              </tr>
+                          `;
+                      }
+                  }
+
+                  const featuresList = document.getElementById('details-features-list');
+                  if (featuresList) {
+                      featuresList.innerHTML = '';
+                      extra.features.forEach(feat => {
+                          featuresList.innerHTML += `
+                              <li class="text-secondary mb-2 d-flex align-items-start">
+                                  <i class="bi bi-check-circle-fill text-success me-2 mt-1" style="font-size: 14px;"></i>
+                                  <span>${feat}</span>
+                              </li>
+                          `;
+                      });
+                  }
+
+                  // Mock Reviews
+                  loadMockReviews(product);
+
+                  // Check Wishlist Status
+                  checkWishlistStatus(product.id);
+
+                  // Load Related Products
+                  loadRelatedRecommendations(product.category, product.id);
+
+              } catch (err) {
+                  console.error(err);
+              }
+          };
+
+          const checkWishlistStatus = async (pId) => {
+              try {
+                  const res = await fetch('/api/wishlist');
+                  const data = await res.json();
+                  if (data.success) {
+                      const item = data.wishlist.find(i => i.product.id === pId);
+                      wishlistActive = !!item;
+                      updateWishlistButtonUI();
+                  }
+              } catch (err) {
+                  console.error(err);
+              }
+          };
+
+          const updateWishlistButtonUI = () => {
+              const wlBtn = document.getElementById('btn-details-wishlist');
+              const wlIcon = document.getElementById('btn-wishlist-icon');
+              if (wlBtn && wlIcon) {
+                  if (wishlistActive) {
+                      wlIcon.className = "bi bi-heart-fill text-danger me-1";
+                      wlBtn.classList.add('border-danger');
+                  } else {
+                      wlIcon.className = "bi bi-heart me-1";
+                      wlBtn.classList.remove('border-danger');
+                  }
+              }
+          };
+
+          // Wishlist Toggle Event
+          const wlBtn = document.getElementById('btn-details-wishlist');
+          if (wlBtn) {
+              wlBtn.addEventListener('click', async () => {
+                  try {
+                      if (wishlistActive) {
+                          const res = await fetch(`/api/wishlist/${productId}`, { method: 'DELETE' });
+                          const data = await res.json();
+                          if (data.success) {
+                              wishlistActive = false;
+                              updateWishlistButtonUI();
+                          }
+                      } else {
+                          const res = await fetch('/api/wishlist', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ product_id: productId })
+                          });
+                          const data = await res.json();
+                          if (data.success) {
+                              wishlistActive = true;
+                              updateWishlistButtonUI();
+                          } else {
+                              alert(data.message || "Please log in to save items to your wishlist.");
+                          }
+                      }
+                  } catch (err) {
+                      console.error(err);
+                  }
+              });
+          }
+
+          // Interactive Color Selector
+          const colorDots = document.querySelectorAll('.color-dot');
+          const colorLabel = document.getElementById('selected-color-label');
+          colorDots.forEach(dot => {
+              dot.addEventListener('click', (e) => {
+                  colorDots.forEach(d => d.classList.remove('active'));
+                  e.currentTarget.classList.add('active');
+                  const colorName = e.currentTarget.getAttribute('data-name');
+                  colorLabel.textContent = `Selected: ${colorName}`;
+              });
+          });
+
+          // Helper to Render Stars
+          const renderStars = (rating) => {
+              let stars = '';
+              const fullStars = Math.floor(rating);
+              const halfStar = rating % 1 >= 0.5;
+              for (let i = 1; i <= 5; i++) {
+                  if (i <= fullStars) {
+                      stars += '<i class="bi bi-star-fill me-1"></i>';
+                  } else if (i === fullStars + 1 && halfStar) {
+                      stars += '<i class="bi bi-star-half me-1"></i>';
+                  } else {
+                      stars += '<i class="bi bi-star me-1"></i>';
+                  }
+              }
+              return stars;
+          };
+
+          // Mock Reviews generator
+          const loadMockReviews = (product) => {
+              const reviewsList = document.getElementById('details-reviews-list');
+              if (!reviewsList) return;
+              
+              const mockFeedbacks = [
+                  "Absolute value for money! The build quality is amazing and fits perfectly into my workflow.",
+                  "Really happy with the battery life and display quality. Exceeded my expectations.",
+                  "Works well, but delivery was slightly delayed. The product itself is perfect.",
+                  "Excellent product, matches all the specs advertised. Recommended for purchase!",
+                  "Good packaging, premium feel, and the user interface feels fast. Highly recommend."
+              ];
+              
+              const reviewers = [
+                  { name: "Rahul S.", initial: "R" },
+                  { name: "Aishwarya K.", initial: "A" },
+                  { name: "Suresh P.", initial: "S" }
+              ];
+
+              reviewsList.innerHTML = '';
+              reviewers.forEach((rev, idx) => {
+                  const rating = idx === 0 ? 5 : (idx === 1 ? 4 : Math.floor(product.rating));
+                  reviewsList.innerHTML += `
+                      <div class="review-card">
+                          <div class="d-flex align-items-center gap-3 mb-2">
+                              <div class="avatar-circle">${rev.initial}</div>
+                              <div>
+                                  <h6 class="text-white fw-bold mb-0 text-sm">${rev.name}</h6>
+                                  <div class="d-flex text-warning text-xs mt-0.5">
+                                      ${renderStars(rating)}
+                                  </div>
+                              </div>
+                              <span class="badge bg-success-glow text-success text-xs ms-auto"><i class="bi bi-patch-check me-1"></i>Verified</span>
+                          </div>
+                          <p class="text-secondary text-xs mb-0 mt-2 italic">
+                              "${mockFeedbacks[idx % mockFeedbacks.length]}"
+                          </p>
+                      </div>
+                  `;
+              });
+          };
+
+          // Related Products
+          const loadRelatedRecommendations = async (category, currentId) => {
+              const container = document.getElementById('details-related-products');
+              if (!container) return;
+              try {
+                  const res = await fetch(`/api/products?category=${category}`);
+                  const products = await res.json();
+                  if (res.ok) {
+                      container.innerHTML = '';
+                      const related = products.filter(p => p.id !== currentId).slice(0, 3);
+                      if (related.length === 0) {
+                          container.innerHTML = '<div class="col-12 text-secondary py-3 text-center">No similar products found.</div>';
+                          return;
+                      }
+
+                      related.forEach(p => {
+                          const col = document.createElement('div');
+                          col.className = 'col-md-4';
+                          col.innerHTML = `
+                              <div class="card glass-card h-100 border border-purple-thin product-card hover-lift" style="cursor: pointer;" onclick="window.location.href='product-details.html?id=${p.id}'">
+                                  <img src="${getProductImage(p.name, p.category)}" class="card-img-top" alt="${p.name}" style="height: 160px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                                  <div class="card-body text-start p-3">
+                                      <span class="text-secondary text-xs text-uppercase fw-bold">${p.brand}</span>
+                                      <h6 class="text-white fw-bold mb-2 text-truncate text-sm">${p.name}</h6>
+                                      <div class="d-flex justify-content-between align-items-center mt-3">
+                                          <span class="text-info fw-extrabold text-sm">₹${p.price.toLocaleString('en-IN')}</span>
+                                          <span class="badge bg-purple-glow text-white text-xs"><i class="bi bi-star-fill text-warning me-1"></i>${p.rating}</span>
+                                      </div>
+                                  </div>
+                              </div>
+                          `;
+                          container.appendChild(col);
+                      });
+                  }
+              } catch (err) {
+                  console.error(err);
+              }
+          };
+
+          loadProductFullDetails();
+      }
 
      // --- Payment Page Initialization ---
      if (pathMatches('payment')) {

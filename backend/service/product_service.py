@@ -3,7 +3,7 @@ from backend.entity.product import Product
 
 class ProductService:
     @staticmethod
-    def add_product(name, category, brand, price, rating, description, stock):
+    def add_product(name, category, brand, price, rating, description, stock, image_url=None, specs=None, features=None):
         if not name or not category or not brand or price is None or rating is None:
             raise ValueError("Required fields (name, category, brand, price, rating) are missing.")
         
@@ -14,7 +14,10 @@ class ProductService:
             price=float(price),
             rating=float(rating),
             description=description,
-            stock=int(stock)
+            stock=int(stock),
+            image_url=image_url,
+            specs=specs,
+            features=features
         )
         return ProductRepository.save(product)
 
@@ -38,6 +41,12 @@ class ProductService:
             product.description = data['description']
         if 'stock' in data:
             product.stock = int(data['stock'])
+        if 'image_url' in data:
+            product.image_url = data['image_url']
+        if 'specs' in data:
+            product.specs = data['specs']
+        if 'features' in data:
+            product.features = data['features']
             
         return ProductRepository.save(product)
 

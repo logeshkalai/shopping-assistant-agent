@@ -1,0 +1,25 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Copy only requirements.txt first to leverage Docker layer caching
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application files
+COPY . .
+
+# Set default environment variables for backend running
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV BACKEND_HOST=0.0.0.0
+ENV BACKEND_PORT=5000
+ENV DATABASE_DIR=/app/database_dir
+
+# Create the database directory for persistent volume mapping
+RUN mkdir -p /app/database_dir
+
+EXPOSE 5000
+
+CMD ["python", "app_api.py"]

@@ -38,6 +38,16 @@ def create_api_app():
                     conn.execute(db.text("ALTER TABLE users ADD COLUMN address TEXT"))
                 if 'created_at' not in columns:
                     conn.execute(db.text("ALTER TABLE users ADD COLUMN created_at DATETIME"))
+
+                # Check columns in products table
+                result_prod = conn.execute(db.text("PRAGMA table_info(products)"))
+                columns_prod = [row[1] for row in result_prod.fetchall()]
+                if 'image_url' not in columns_prod:
+                    conn.execute(db.text("ALTER TABLE products ADD COLUMN image_url VARCHAR(500)"))
+                if 'specs' not in columns_prod:
+                    conn.execute(db.text("ALTER TABLE products ADD COLUMN specs TEXT"))
+                if 'features' not in columns_prod:
+                    conn.execute(db.text("ALTER TABLE products ADD COLUMN features TEXT"))
         except Exception as e:
             print("Database migration check:", e)
         seed_data()
@@ -46,5 +56,7 @@ def create_api_app():
 
 if __name__ == '__main__':
     app = create_api_app()
-    print("Backend API Data Server running on port 5000...")
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    host = os.environ.get('BACKEND_HOST', '127.0.0.1')
+    port = int(os.environ.get('BACKEND_PORT', 5000))
+    print(f"Backend API Data Server running on http://{host}:{port}...")
+    app.run(host=host, port=port, debug=True)

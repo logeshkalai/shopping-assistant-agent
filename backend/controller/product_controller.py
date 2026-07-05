@@ -39,7 +39,10 @@ def add_product():
             price=data.get('price'),
             rating=data.get('rating', 0.0),
             description=data.get('description'),
-            stock=data.get('stock', 0)
+            stock=data.get('stock', 0),
+            image_url=data.get('image_url'),
+            specs=data.get('specs'),
+            features=data.get('features')
         )
         return jsonify({'success': True, 'product': product.to_dict()}), 201
     except ValueError as e:

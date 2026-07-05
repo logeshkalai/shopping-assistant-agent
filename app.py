@@ -72,6 +72,11 @@ def create_app(testing=False):
     def payment_page():
         return render_template('payment.html')
 
+    @app.route('/product-details')
+    @app.route('/product-details.html')
+    def product_details_page():
+        return render_template('product-details.html')
+
     # Seed Database Function
     if not testing:
         with app.app_context():
@@ -95,6 +100,16 @@ def create_app(testing=False):
                         conn.execute(db.text("ALTER TABLE users ADD COLUMN analytics_consent BOOLEAN DEFAULT 1"))
                     if 'phone_verified' not in columns:
                         conn.execute(db.text("ALTER TABLE users ADD COLUMN phone_verified BOOLEAN DEFAULT 0"))
+                    
+                    # Check columns in products table
+                    result_prod = conn.execute(db.text("PRAGMA table_info(products)"))
+                    columns_prod = [row[1] for row in result_prod.fetchall()]
+                    if 'image_url' not in columns_prod:
+                        conn.execute(db.text("ALTER TABLE products ADD COLUMN image_url VARCHAR(500)"))
+                    if 'specs' not in columns_prod:
+                        conn.execute(db.text("ALTER TABLE products ADD COLUMN specs TEXT"))
+                    if 'features' not in columns_prod:
+                        conn.execute(db.text("ALTER TABLE products ADD COLUMN features TEXT"))
             except Exception as e:
                 print("Database migration check:", e)
             seed_data()
@@ -369,4 +384,8 @@ def seed_data():
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    host = os.environ.get('APP_HOST', '127.0.0.1')
+    port = int(os.environ.get('APP_PORT', 5000))
+    print(f"Unified Server running on http://{host}:{port}...")
+    app.run(host=host, port=port, debug=True)
+

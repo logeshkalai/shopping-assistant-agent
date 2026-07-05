@@ -6,7 +6,7 @@
     <meta name="description" content="AI-Powered Shopping Assistant Agent - Catalog Management">
     <title>Manage Products - AI Shopping Assistant</title>
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Custom Premium Stylesheet -->
@@ -123,9 +123,24 @@
                                 <input type="number" class="form-control glass-input" id="prod-stock" placeholder="10" required>
                             </div>
 
+                            <div class="mb-3">
+                                <label for="prod-image-url" class="form-label text-secondary">Product Image URL (Optional)</label>
+                                <input type="url" class="form-control glass-input" id="prod-image-url" placeholder="https://example.com/image.jpg">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="prod-features" class="form-label text-secondary">Highlight Features (Comma separated)</label>
+                                <textarea class="form-control glass-input" id="prod-features" rows="2" placeholder="Feature 1, Feature 2, Feature 3"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="prod-specs" class="form-label text-secondary">Technical Specifications (Format: Key:Value, one per line)</label>
+                                <textarea class="form-control glass-input" id="prod-specs" rows="3" placeholder="Display:15.6 inch OLED&#10;Processor:Intel Core i7&#10;RAM:16GB DDR5"></textarea>
+                            </div>
+
                             <div class="mb-4">
                                 <label for="prod-desc" class="form-label text-secondary">Description</label>
-                                <textarea class="form-control glass-input" id="prod-desc" rows="3" placeholder="Specs, features, processor detail..." required></textarea>
+                                <textarea class="form-control glass-input" id="prod-desc" rows="2" placeholder="Marketing description..." required></textarea>
                             </div>
 
                             <div class="d-flex gap-2">
@@ -253,7 +268,7 @@
     </div>
 
     <!-- Bootstrap 5 Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="bootstrap.bundle.min.js"></script>
     <!-- Custom Main JS -->
     <script src="main.js"></script>
 
@@ -270,6 +285,9 @@
             const ratingInput = document.getElementById('prod-rating');
             const stockInput = document.getElementById('prod-stock');
             const descInput = document.getElementById('prod-desc');
+            const imageUrlInput = document.getElementById('prod-image-url');
+            const featuresInput = document.getElementById('prod-features');
+            const specsInput = document.getElementById('prod-specs');
             const saveBtn = document.getElementById('save-btn');
             const cancelBtn = document.getElementById('cancel-btn');
             const tableSearch = document.getElementById('table-search');
@@ -348,10 +366,15 @@
                 ratingInput.value = p.rating;
                 stockInput.value = p.stock;
                 descInput.value = p.description || '';
+                if (imageUrlInput) imageUrlInput.value = p.image_url || '';
+                if (featuresInput) featuresInput.value = p.features || '';
+                if (specsInput) specsInput.value = p.specs || '';
 
                 formTitle.innerHTML = `<i class="bi bi-pencil-fill text-warning me-2"></i>Edit Product #${id}`;
                 saveBtn.textContent = 'Update Product';
                 cancelBtn.classList.remove('d-none');
+                // Scroll to form smoothly
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
             function resetForm() {
@@ -375,7 +398,10 @@
                     price: parseFloat(priceInput.value),
                     rating: parseFloat(ratingInput.value),
                     stock: parseInt(stockInput.value),
-                    description: descInput.value
+                    description: descInput.value,
+                    image_url: imageUrlInput ? imageUrlInput.value.trim() || null : null,
+                    features: featuresInput ? featuresInput.value.trim() || null : null,
+                    specs: specsInput ? specsInput.value.trim() || null : null
                 };
 
                 const url = id ? `/api/products/${id}` : '/api/products';
