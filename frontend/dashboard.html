@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Powered Shopping Assistant Agent - User Dashboard">
+    <title>Dashboard - AI Shopping Assistant</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom Premium Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-glass sticky-top">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-glow" href="dashboard.html">
+                <i class="bi bi-robot me-2"></i>AI Shopping Agent
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-glow active" href="dashboard.html">
+                            <i class="bi bi-house-door-fill me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="nav-manage-products">
+                        <a class="nav-link nav-link-glow" href="products.html">
+                            <i class="bi bi-box-seam-fill me-1"></i>Manage Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-glow" href="chatbot.html">
+                            <i class="bi bi-chat-right-dots-fill me-1"></i>AI Assistant
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="nav-profile-link">
+                        <a class="nav-link nav-link-glow" href="profile.html">
+                            <i class="bi bi-person-fill me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div id="nav-user" class="d-flex align-items-center gap-3 d-none">
+                        <a href="profile.html" class="text-light text-decoration-none nav-link-glow">
+                            <i class="bi bi-person-circle me-1 text-info"></i>Hi, <span id="current-user-name" class="fw-bold">Guest</span>
+                        </a>
+                        <button id="logout-btn" class="btn btn-sm btn-glow-outline">
+                            <i class="bi bi-box-arrow-right me-1"></i>Logout
+                        </button>
+                    </div>
+                    <div id="nav-guest" class="d-flex gap-2">
+                        <a href="login.html" class="btn btn-sm btn-glow-outline">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-sm btn-glow-primary">
+                            <i class="bi bi-person-plus-fill me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="row">
+            <!-- Left Column: Search Filters, Product Grid, and Comparisons -->
+            <div class="col-lg-9">
+                
+                <!-- Hero Promo Banner -->
+                <div class="card glass-card mb-4 overflow-hidden border-purple-thin animate-fade-in" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(59, 130, 246, 0.12)); border: 1px solid var(--border-color);">
+                    <div class="card-body p-4 p-md-5 d-flex flex-column flex-md-row justify-content-between align-items-center gap-4">
+                        <div class="text-start">
+                            <span class="badge bg-purple-glow text-white text-xs mb-2 px-3 py-1.5" style="background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4);"><i class="bi bi-stars text-warning me-1"></i>Summer Tech Sale</span>
+                            <h2 class="text-white fw-bold mb-2 display-6" style="text-shadow: 0 0 20px rgba(168, 85, 247, 0.2);">Upgrade Your Developer Setup</h2>
+                            <p class="text-secondary text-sm mb-0" style="max-width: 500px;">Get up to 20% off on premium laptops, smart keyboards, and developer-centric accessories tailored by our AI assistant.</p>
+                        </div>
+                        <div class="flex-shrink-0 text-center text-md-end">
+                            <h1 class="text-info fw-bold mb-0 font-monospace display-5" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">20% OFF</h1>
+                            <span class="text-secondary text-xs uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Code: WELCOME10 applied</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search & Filter Card -->
+                <div class="card glass-card mb-4 p-3">
+                    <div class="card-body">
+                        <form id="search-form" class="row g-3 align-items-center">
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi bi-search"></i></span>
+                                    <input type="text" id="search-input" class="form-control glass-input border-start-0" placeholder="Search laptops, phones, keywords...">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="category-filter" class="form-select glass-input glass-select">
+                                    <option value="">All Categories</option>
+                                    <option value="laptop">Laptops</option>
+                                    <option value="phone">Phones</option>
+                                    <option value="headphone">Headphones</option>
+                                    <option value="monitor">Monitors</option>
+                                    <option value="keyboard">Keyboards</option>
+                                    <option value="mouse">Mice</option>
+                                    <option value="sports">Sports Equipment</option>
+                                    <option value="food">Food & Groceries</option>
+                                    <option value="appliance">Home Appliances</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="price-range" class="form-label text-secondary mb-1 d-flex justify-content-between">
+                                    <span>Max Budget:</span>
+                                    <span id="price-val" class="text-info fw-bold">₹120,000</span>
+                                </label>
+                                <input type="range" class="form-range" id="price-range" min="0" max="120000" step="5000" value="120000">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Comparison Dashboard -->
+                <div id="comparison-section" class="card glass-card mb-4 p-3 d-none">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title text-white mb-0"><i class="bi bi-shuffle text-info me-2"></i>Product Comparison Matrix</h5>
+                            <span class="badge bg-secondary">Max 3 Items</span>
+                        </div>
+                        <div class="table-responsive" id="comparison-body">
+                            <!-- Comparison table will be rendered dynamically here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Grid Header -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-white mb-0">Product Catalog</h4>
+                    <small class="text-muted">Compare up to 3 items by clicking "Compare"</small>
+                </div>
+
+                <!-- Dynamic Product Grid -->
+                <div class="row" id="products-grid">
+                    <!-- Products will be dynamically populated here -->
+                </div>
+
+            </div>
+
+            <!-- Right Column: Wishlist Widget -->
+            <div class="col-lg-3">
+                <div class="card glass-card p-3 sticky-top" style="top: 90px; z-index: 1000;">
+                    <div class="card-body">
+                        <h5 class="card-title text-white mb-4">
+                            <i class="bi bi-heart-fill text-danger me-2"></i>My Wishlist
+                        </h5>
+                        <div id="wishlist-items" class="wishlist-drawer">
+                            <!-- Wishlist items will be rendered dynamically here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Product Details Modal -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-purple-thin text-white p-3">
+                <div class="modal-header border-bottom border-purple-thin">
+                    <h5 class="modal-title" id="detailsModalLabel"><i class="bi bi-info-circle-fill text-info me-2"></i>Product Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="details-modal-body">
+                    <!-- Content populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-purple-thin text-white p-3">
+                <div class="modal-header border-bottom border-purple-thin">
+                    <h5 class="modal-title" id="checkoutModalLabel"><i class="bi bi-credit-card-2-front text-info me-2"></i>Secure Checkout</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="checkout-close-btn"></button>
+                </div>
+                <div class="modal-body" id="checkout-modal-body">
+                    <div class="mb-4">
+                        <h6 class="text-secondary mb-1">Product Details</h6>
+                        <h5 id="checkout-prod-name" class="text-white">Product Name</h5>
+                        <p id="checkout-prod-desc" class="text-secondary text-sm">Description text</p>
+                        <h3 class="text-info fw-bold mb-0" id="checkout-prod-price">₹0</h3>
+                    </div>
+                    
+                    <form id="checkout-form">
+                        <input type="hidden" id="checkout-prod-id" value="">
+                        
+                        <div class="mb-4">
+                            <label class="form-label text-secondary mb-2">Select Payment Method</label>
+                            <div class="d-flex flex-column gap-2">
+                                <label class="d-flex align-items-center p-2 rounded border border-purple-thin bg-dark-alpha cursor-pointer" style="background: rgba(15, 12, 27, 0.4); cursor: pointer;">
+                                    <input type="radio" name="payment_method" value="UPI" checked class="me-2">
+                                    <span>UPI / GooglePay / PhonePe</span>
+                                </label>
+                                <label class="d-flex align-items-center p-2 rounded border border-purple-thin bg-dark-alpha cursor-pointer" style="background: rgba(15, 12, 27, 0.4); cursor: pointer;">
+                                    <input type="radio" name="payment_method" value="Credit/Debit Card" class="me-2">
+                                    <span>Credit / Debit Card</span>
+                                </label>
+                                <label class="d-flex align-items-center p-2 rounded border border-purple-thin bg-dark-alpha cursor-pointer" style="background: rgba(15, 12, 27, 0.4); cursor: pointer;">
+                                    <input type="radio" name="payment_method" value="Net Banking" class="me-2">
+                                    <span>Net Banking</span>
+                                </label>
+                                <label class="d-flex align-items-center p-2 rounded border border-purple-thin bg-dark-alpha cursor-pointer" style="background: rgba(15, 12, 27, 0.4); cursor: pointer;">
+                                    <input type="radio" name="payment_method" value="COD" class="me-2">
+                                    <span>Cash on Delivery (COD)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-glow-primary w-100 py-2">
+                            <i class="bi bi-shield-lock-fill me-2"></i>Complete Secure Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 mt-auto border-top border-purple-thin text-secondary" style="background: rgba(15, 12, 27, 0.9); margin-top: 5rem !important;">
+        <div class="container">
+            <p class="mb-0 text-sm">© 2026 AI-Powered Shopping Assistant Agent. Crafted with Flask, SQLite & Bootstrap 5.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="mobile-bottom-nav d-lg-none">
+        <a href="dashboard.html" class="nav-item-bottom active" id="btn-bottom-home">
+            <i class="bi bi-house-door"></i>
+            <span>Home</span>
+        </a>
+        <a href="profile.html" class="nav-item-bottom" id="btn-bottom-profile">
+            <i class="bi bi-person"></i>
+            <span>You</span>
+        </a>
+        <a href="chatbot.html" class="nav-item-bottom" id="btn-bottom-assistant">
+            <i class="bi bi-layers"></i>
+            <span>More</span>
+        </a>
+        <a href="profile.html#pane-wishlist" class="nav-item-bottom" id="btn-bottom-cart">
+            <div class="position-relative d-inline-block">
+                <i class="bi bi-cart"></i>
+                <span class="badge rounded-circle bg-danger position-absolute top-0 start-100 translate-middle text-xs px-1" id="bottom-cart-badge" style="font-size: 8px; transform: translate(-30%, -30%) !important;">0</span>
+            </div>
+            <span>Cart</span>
+        </a>
+        <a href="#" class="nav-item-bottom" id="btn-bottom-menu" data-bs-toggle="offcanvas" data-bs-target="#mobileMenuDrawer">
+            <i class="bi bi-list"></i>
+            <span>Menu</span>
+        </a>
+    </div>
+
+    <!-- Mobile Offcanvas Menu Drawer -->
+    <div class="offcanvas offcanvas-bottom glass-card border-purple-thin text-light" tabindex="-1" id="mobileMenuDrawer" style="height: auto; border-top-left-radius: 20px; border-top-right-radius: 20px; background: rgba(15, 12, 27, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--accent-purple);">
+        <div class="offcanvas-header border-bottom border-purple-thin">
+            <h5 class="offcanvas-title fw-bold text-white"><i class="bi bi-grid-fill text-info me-2"></i>Quick Menu</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body py-4">
+            <div class="row g-3 text-center">
+                <div class="col-4">
+                    <a href="dashboard.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-house-door-fill text-info fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Home</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="profile.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-person-fill text-purple fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Profile</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="chatbot.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-chat-right-dots-fill text-warning fs-3 d-block mb-1"></i>
+                        <span class="text-xs">AI Assistant</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="products.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark d-none" id="mobile-menu-admin-link">
+                        <i class="bi bi-box-seam-fill text-success fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Inventory</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="#" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark" id="mobile-menu-logout-btn">
+                        <i class="bi bi-box-arrow-right text-danger fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Custom Main JS -->
+    <script src="main.js"></script>
+</body>
+</html>

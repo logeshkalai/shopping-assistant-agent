@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Powered Shopping Assistant Agent - User Profile Management">
+    <title>Edit Profile - AI Shopping Assistant</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom Premium Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-glass sticky-top">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-glow" href="dashboard.html">
+                <i class="bi bi-robot me-2"></i>AI Shopping Agent
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-glow" href="dashboard.html">
+                            <i class="bi bi-house-door-fill me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="nav-manage-products">
+                        <a class="nav-link nav-link-glow" href="products.html">
+                            <i class="bi bi-box-seam-fill me-1"></i>Manage Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-glow" href="chatbot.html">
+                            <i class="bi bi-chat-right-dots-fill me-1"></i>AI Assistant
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="nav-profile-link">
+                        <a class="nav-link nav-link-glow active" href="profile.html">
+                            <i class="bi bi-person-fill me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div id="nav-user" class="d-flex align-items-center gap-3 d-none">
+                        <a href="profile.html" class="text-light text-decoration-none nav-link-glow active">
+                            <i class="bi bi-person-circle me-1 text-info"></i>Hi, <span id="current-user-name" class="fw-bold">Guest</span>
+                        </a>
+                        <button id="logout-btn" class="btn btn-sm btn-glow-outline">
+                            <i class="bi bi-box-arrow-right me-1"></i>Logout
+                        </button>
+                    </div>
+                    <div id="nav-guest" class="d-flex gap-2">
+                        <a href="login.html" class="btn btn-sm btn-glow-outline">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-sm btn-glow-primary">
+                            <i class="bi bi-person-plus-fill me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="row g-4">
+            <!-- Left Sidebar Navigation Menu -->
+            <div class="col-lg-3">
+                <div class="card glass-card p-3 mb-4">
+                    <div class="card-body p-0">
+                        <div class="text-center mb-4 pb-3 border-bottom border-purple-thin">
+                            <i class="bi bi-person-circle text-info display-6 mb-2"></i>
+                            <h5 id="sidebar-user-name" class="text-white fw-bold">Loading...</h5>
+                            <span id="sidebar-user-badge" class="badge bg-purple-glow text-white text-xs">Plus Member</span>
+                        </div>
+                        
+                        <div class="list-group list-group-flush profile-menu" id="profile-pills-tab" role="tablist">
+                            <button class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center active" id="pill-profile-tab" data-bs-toggle="pill" data-bs-target="#pane-profile" type="button" role="tab">
+                                <i class="bi bi-person-bounding-box text-info me-3 fs-5"></i> My Profile
+                            </button>
+                            <button class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center" id="pill-orders-tab" data-bs-toggle="pill" data-bs-target="#pane-orders" type="button" role="tab">
+                                <i class="bi bi-box-seam text-info me-3 fs-5"></i> Orders
+                            </button>
+                            <button class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center" id="pill-wishlist-tab" data-bs-toggle="pill" data-bs-target="#pane-wishlist" type="button" role="tab">
+                                <i class="bi bi-heart text-info me-3 fs-5"></i> Wishlist
+                            </button>
+                            <button class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center" id="pill-rewards-tab" data-bs-toggle="pill" data-bs-target="#pane-rewards" type="button" role="tab">
+                                <i class="bi bi-gift text-info me-3 fs-5"></i> Rewards & Gift Cards
+                            </button>
+                            <button class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center" id="pill-cards-tab" data-bs-toggle="pill" data-bs-target="#pane-cards" type="button" role="tab">
+                                <i class="bi bi-credit-card text-info me-3 fs-5"></i> Saved Cards & Wallets
+                            </button>
+                            <button class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center" id="pill-notifications-tab" data-bs-toggle="pill" data-bs-target="#pane-notifications" type="button" role="tab">
+                                <i class="bi bi-bell text-info me-3 fs-5"></i> Notifications
+                            </button>
+                            <button class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center" id="pill-security-tab" data-bs-toggle="pill" data-bs-target="#pane-security" type="button" role="tab">
+                                <i class="bi bi-shield-lock text-info me-3 fs-5"></i> Security & Privacy
+                            </button>
+                            <a href="chatbot.html" class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center">
+                                <i class="bi bi-headset text-info me-3 fs-5"></i> 24x7 Customer Care
+                            </a>
+                            <button class="list-group-item list-group-item-action bg-transparent text-light border-0 py-2.5 d-flex align-items-center" id="pill-download-tab" data-bs-toggle="pill" data-bs-target="#pane-download" type="button" role="tab">
+                                <i class="bi bi-download text-info me-3 fs-5"></i> Download App
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Main Content Panels -->
+            <div class="col-lg-9">
+                <div class="tab-content" id="profile-pills-tabContent">
+                    <!-- Tab Pane 1: My Profile Settings -->
+                    <div class="tab-pane fade show active" id="pane-profile" role="tabpanel">
+                        <div class="row g-4">
+                            <div class="col-lg-7">
+                                <div class="card glass-card p-4">
+                                    <div class="card-body">
+                                        <h4 class="text-white fw-bold mb-3"><i class="bi bi-person-gear text-info me-2"></i>Personal Details</h4>
+                                        <div id="profile-success" class="alert alert-success d-none" role="alert"></div>
+                                        <div id="profile-error" class="alert alert-danger d-none" role="alert"></div>
+                                        
+                                        <form id="profile-update-form">
+                                            <div class="mb-3">
+                                                <label for="profile-name" class="form-label text-secondary">Full Name</label>
+                                                <input type="text" class="form-control glass-input" id="profile-name" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="profile-email" class="form-label text-secondary d-flex justify-content-between align-items-center w-100">
+                                                    <span>Email Address</span>
+                                                    <span class="badge bg-success-glow text-success text-xs fw-normal py-1 px-2"><i class="bi bi-patch-check-fill me-1"></i>Verified</span>
+                                                </label>
+                                                <input type="email" class="form-control glass-input" id="profile-email" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="profile-phone" class="form-label text-secondary d-flex justify-content-between align-items-center w-100">
+                                                    <span>Phone Number</span>
+                                                    <span id="profile-phone-status" class="badge bg-warning-glow text-warning text-xs fw-normal py-1 px-2" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#verifyPhoneModal">
+                                                        <i class="bi bi-exclamation-triangle-fill me-1"></i>Verify Now
+                                                    </span>
+                                                </label>
+                                                <input type="tel" class="form-control glass-input" id="profile-phone" placeholder="Enter contact number">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="profile-address" class="form-label text-secondary">Shipping/Delivery Address</label>
+                                                <textarea class="form-control glass-input" id="profile-address" rows="3" placeholder="Enter delivery address details"></textarea>
+                                            </div>
+                                            <div class="mb-3 border-top border-purple-thin my-4 pt-3">
+                                                <h6 class="text-info fw-bold mb-2">Change Password (Optional)</h6>
+                                                <label for="profile-new-password" class="form-label text-secondary">New Password</label>
+                                                <input type="password" class="form-control glass-input" id="profile-new-password" placeholder="Leave blank to keep current password">
+                                            </div>
+                                            <div class="mb-4 border-top border-purple-thin pt-3">
+                                                <h6 class="text-danger fw-bold mb-2">Verification Required</h6>
+                                                <label for="profile-curr-password" class="form-label text-secondary">Current Password</label>
+                                                <input type="password" class="form-control glass-input" id="profile-curr-password" placeholder="Confirm current password to save changes" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-glow-primary w-100 py-2" id="profile-submit-btn">
+                                                <i class="bi bi-check-circle-fill me-2"></i>Save Changes
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="card glass-card p-4">
+                                    <div class="card-body">
+                                        <h4 class="text-white fw-bold mb-3"><i class="bi bi-shield-check text-success me-2"></i>Account Status</h4>
+                                        <div class="p-3 rounded mb-3" style="background: rgba(15, 12, 27, 0.4); border: 1px solid var(--border-color);">
+                                            <small class="text-secondary d-block">Access Role</small>
+                                            <span id="profile-role-badge" class="badge bg-info-glow text-info mt-1">Standard Customer</span>
+                                        </div>
+                                        <div class="p-3 rounded" style="background: rgba(15, 12, 27, 0.4); border: 1px solid var(--border-color);">
+                                            <small class="text-secondary d-block">Member Since</small>
+                                            <span id="profile-member-since" class="text-white fw-bold d-block mt-1">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card glass-card p-4 mt-4">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h4 class="text-white fw-bold mb-0"><i class="bi bi-geo-alt-fill text-warning me-2"></i>Address Book</h4>
+                                            <button type="button" class="btn btn-sm btn-glow-outline py-1 px-2.5" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                                <i class="bi bi-plus-circle me-1"></i>Add
+                                            </button>
+                                        </div>
+                                        
+                                        <div id="addresses-container" style="max-height: 300px; overflow-y: auto;">
+                                            <p class="text-secondary text-sm mb-0">No shipping addresses added yet.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 2: Purchase Orders -->
+                    <div class="tab-pane fade" id="pane-orders" role="tabpanel">
+                        <div class="card glass-card p-4">
+                            <div class="card-body">
+                                <h4 class="text-white fw-bold mb-3"><i class="bi bi-clock-history text-info me-2"></i>Order History</h4>
+                                <div id="profile-orders-container" class="table-responsive" style="min-height: 250px;">
+                                    <p class="text-secondary text-center py-4">No purchases recorded yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane: Wishlist (Cart) -->
+                    <div class="tab-pane fade" id="pane-wishlist" role="tabpanel">
+                        <div class="card glass-card p-4">
+                            <div class="card-body">
+                                <h4 class="text-white fw-bold mb-3"><i class="bi bi-heart-fill text-danger me-2"></i>My Wishlist / Cart</h4>
+                                <div id="wishlist-items" class="wishlist-drawer">
+                                    <p class="text-secondary text-center py-4">Your wishlist is empty.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 3: Rewards & Gift Cards -->
+                    <div class="tab-pane fade" id="pane-rewards" role="tabpanel">
+                        <div class="card glass-card p-4 mb-4">
+                            <div class="card-body">
+                                <h4 class="text-white fw-bold mb-3"><i class="bi bi-gift text-warning me-2"></i>Rewards & Loyalty Program</h4>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="p-4 rounded text-center" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(236, 72, 153, 0.15)); border: 1px solid rgba(245,158,11,0.25);">
+                                            <h6 class="text-secondary mb-1">SuperCoins Balance</h6>
+                                            <h2 class="text-warning fw-bold mb-0"><i class="bi bi-coin me-1"></i>240 Coins</h2>
+                                            <small class="text-success text-xs mt-2 d-block">Equivalent to ₹240 cash discount</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="p-4 rounded text-center" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid rgba(6,182,212,0.25);">
+                                            <h6 class="text-secondary mb-1">Gift Card Balance</h6>
+                                            <h2 class="text-cyan fw-bold mb-0">₹1,500.00</h2>
+                                            <small class="text-secondary text-xs mt-2 d-block">Auto-applied at payment checkout</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card glass-card p-4">
+                            <div class="card-body">
+                                <h5 class="text-white fw-bold mb-3"><i class="bi bi-tags-fill text-info me-2"></i>Active Promotional Vouchers</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="p-3 rounded border-purple-thin" style="background: rgba(15, 12, 27, 0.4);">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="badge bg-success-glow text-success">10% OFF</span>
+                                                <code class="text-info fw-bold">WELCOME10</code>
+                                            </div>
+                                            <p class="text-secondary text-xs mb-0">Valid on all smartphone and accessory purchases.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="p-3 rounded border-purple-thin" style="background: rgba(15, 12, 27, 0.4);">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="badge bg-success-glow text-success">₹5,000 OFF</span>
+                                                <code class="text-info fw-bold">LAPTOPKICK</code>
+                                            </div>
+                                            <p class="text-secondary text-xs mb-0">Valid on premium laptops above ₹60,000 retail price.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 4: Notifications Preferences -->
+                    <div class="tab-pane fade" id="pane-notifications" role="tabpanel">
+                        <div class="card glass-card p-4">
+                            <div class="card-body">
+                                <h4 class="text-white fw-bold mb-3"><i class="bi bi-bell text-info me-2"></i>Notification Settings</h4>
+                                <p class="text-secondary text-sm mb-4">Choose how you want to receive alerts, promotions, and chatbot updates:</p>
+                                
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input glass-input" type="checkbox" id="notify-promo" checked style="cursor:pointer;">
+                                    <label class="form-check-label text-light ms-2" for="notify-promo" style="cursor:pointer;">Promotions & Discount Offers</label>
+                                    <small class="text-secondary d-block mt-0.5 text-xs">Get notified of seasonal sales, coins rewards, and voucher codes.</small>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input glass-input" type="checkbox" id="notify-order" checked style="cursor:pointer;">
+                                    <label class="form-check-label text-light ms-2" for="notify-order" style="cursor:pointer;">Order & Shipping Updates</label>
+                                    <small class="text-secondary d-block mt-0.5 text-xs">Receive real-time transaction receipts and dispatch tracking details.</small>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input glass-input" type="checkbox" id="notify-recs" checked style="cursor:pointer;">
+                                    <label class="form-check-label text-light ms-2" for="notify-recs" style="cursor:pointer;">AI Personalized Recommendations</label>
+                                    <small class="text-secondary d-block mt-0.5 text-xs">Weekly recommendations matching your budget limits and queries history.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 6: Security & Privacy Settings -->
+                    <div class="tab-pane fade" id="pane-security" role="tabpanel">
+                        <div class="row g-4">
+                            <!-- Security Options Column -->
+                            <div class="col-lg-6">
+                                <div class="card glass-card p-4 h-100">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <div>
+                                            <h4 class="text-white fw-bold mb-3"><i class="bi bi-shield-fill-check text-success me-2"></i>Account Security</h4>
+                                            <p class="text-secondary text-sm mb-4">Manage access credentials and two-factor authentication to secure your shopping profile.</p>
+                                            
+                                            <!-- Two-Factor Auth Toggle -->
+                                            <div class="form-check form-switch mb-4 p-3 rounded" style="background: rgba(15, 12, 27, 0.4); border: 1px solid var(--border-color);">
+                                                <input class="form-check-input glass-input ms-0 float-end" type="checkbox" id="security-2fa" style="cursor:pointer;">
+                                                <label class="form-check-label text-light fw-bold mb-0" for="security-2fa" style="cursor:pointer; display: block; margin-right: 2.5rem;">Two-Factor Authentication (2FA)</label>
+                                                <small class="text-secondary d-block mt-1 text-xs">Add an extra layer of security by requiring a verification code at login.</small>
+                                            </div>
+
+                                            <!-- Active Login Sessions -->
+                                            <h6 class="text-info fw-bold mb-3"><i class="bi bi-laptop me-1"></i>Active Sessions</h6>
+                                            <div class="list-group list-group-flush mb-3">
+                                                <div class="list-group-item bg-transparent text-light border-purple-thin px-0 py-2.5 text-sm d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <span class="text-white d-block fw-semibold"><i class="bi bi-browser-chrome text-info me-2"></i>Chrome Browser (Current)</span>
+                                                        <small class="text-secondary text-xs" id="session-current-ip">IP: 127.0.0.1 • Windows OS</small>
+                                                    </div>
+                                                    <span class="badge bg-success-glow text-success text-xs">Active</span>
+                                                </div>
+                                                <div class="list-group-item bg-transparent text-light border-purple-thin px-0 py-2.5 text-sm d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <span class="text-white d-block fw-semibold"><i class="bi bi-phone-fill text-secondary me-2"></i>Mobile App Session</span>
+                                                        <small class="text-secondary text-xs">IP: 192.168.1.45 • Android Device</small>
+                                                    </div>
+                                                    <button class="btn btn-xs btn-outline-danger py-1 px-2 fs-7" id="btn-terminate-mobile-session">Revoke</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Privacy Preferences Column -->
+                            <div class="col-lg-6">
+                                <div class="card glass-card p-4 h-100">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <div>
+                                            <h4 class="text-white fw-bold mb-3"><i class="bi bi-eye-slash-fill text-info me-2"></i>Privacy & Data Settings</h4>
+                                            <p class="text-secondary text-sm mb-4">Control how your personal recommendations data and tracking cookies are processed.</p>
+                                            
+                                            <div class="form-check form-switch mb-3">
+                                                <input class="form-check-input glass-input" type="checkbox" id="privacy-personalization" checked style="cursor:pointer;">
+                                                <label class="form-check-label text-light ms-2" for="privacy-personalization" style="cursor:pointer;">Enable AI Recommendations Personalization</label>
+                                                <small class="text-secondary d-block mt-0.5 text-xs">Allow the AI Shopping Assistant to store your queries history to propose relevant discount matches.</small>
+                                            </div>
+                                            
+                                            <div class="form-check form-switch mb-4">
+                                                <input class="form-check-input glass-input" type="checkbox" id="privacy-sharing" style="cursor:pointer;">
+                                                <label class="form-check-label text-light ms-2" for="privacy-sharing" style="cursor:pointer;">Allow Third-Party Analytics Sharing</label>
+                                                <small class="text-secondary d-block mt-0.5 text-xs">Share anonymized product interests with external brands to customize merchant offers.</small>
+                                            </div>
+
+                                            <div id="privacy-success" class="alert alert-success d-none text-xs" role="alert"></div>
+                                            <div id="privacy-error" class="alert alert-danger d-none text-xs" role="alert"></div>
+
+                                            <button type="button" class="btn btn-glow-outline w-100 py-2 mb-3" id="btn-save-privacy">
+                                                <i class="bi bi-shield-check me-2 text-info"></i>Save Privacy Settings
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Data Portability & Rights Section -->
+                            <div class="col-12">
+                                <div class="card glass-card p-4">
+                                    <div class="card-body">
+                                        <h4 class="text-white fw-bold mb-3"><i class="bi bi-file-earmark-person text-warning me-2"></i>Your Data Rights (GDPR / CCPA)</h4>
+                                        <p class="text-secondary text-sm mb-4">Under global privacy regulations, you have the right to download your account data or request permanent erasure of your personal information from our databases.</p>
+                                        
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="p-3 rounded h-100 d-flex flex-column justify-content-between" style="background: rgba(15, 12, 27, 0.4); border: 1px solid var(--border-color);">
+                                                    <div>
+                                                        <h6 class="text-white fw-bold"><i class="bi bi-download text-info me-2"></i>Portability: Export User Data</h6>
+                                                        <p class="text-secondary text-xs">Request a structural backup archive of your personal details, wishlist interest boards, and full checkout purchase histories in JSON format.</p>
+                                                    </div>
+                                                    <button type="button" class="btn btn-sm btn-glow-primary w-100 py-2 mt-2" id="btn-export-data">
+                                                        <i class="bi bi-filetype-json me-2"></i>Request JSON Data Export
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="p-3 rounded h-100 d-flex flex-column justify-content-between" style="background: rgba(15, 12, 27, 0.4); border: 1px solid var(--border-color);">
+                                                    <div>
+                                                        <h6 class="text-danger fw-bold"><i class="bi bi-trash-fill me-2"></i>Erasure: Delete Account</h6>
+                                                        <p class="text-secondary text-xs">Permanently delete your login account and associated user data. This action is irreversible. All orders, saved addresses, and coins will be lost.</p>
+                                                    </div>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger w-100 py-2 mt-2" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Delete Profile & Erase Data
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Security Audit Logs Section -->
+                            <div class="col-12">
+                                <div class="card glass-card p-4 text-start">
+                                    <div class="card-body">
+                                        <h4 class="text-white fw-bold mb-3"><i class="bi bi-shield-exclamation text-info me-2"></i>Recent Security Activity</h4>
+                                        <p class="text-secondary text-sm mb-3">Review recent sign-ins, verification checkpoints, and session adjustments for this user profile.</p>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table table-dark table-striped align-middle mb-0 text-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Action/Event</th>
+                                                        <th>Timestamp</th>
+                                                        <th>IP Address</th>
+                                                        <th>Device Details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="security-logs-container">
+                                                    <tr>
+                                                        <td colspan="4" class="text-center py-3 text-secondary">Loading audit activities...</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Privacy Policy Document Summary Accordion -->
+                            <div class="col-12">
+                                <div class="card glass-card p-4">
+                                    <div class="card-body">
+                                        <h4 class="text-white fw-bold mb-3"><i class="bi bi-file-earmark-lock text-info me-2"></i>Privacy Policy Agreement</h4>
+                                        <div class="accordion accordion-dark" id="privacyPolicyAccordion">
+                                            <div class="accordion-item bg-transparent border-purple-thin text-light">
+                                                <h2 class="accordion-header" id="headingOne">
+                                                    <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                        1. How we collect and process your shopping queries
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#privacyPolicyAccordion">
+                                                    <div class="accordion-body text-secondary text-sm">
+                                                        Our AI-Powered Shopping Assistant captures the keywords, brand names, and price constraints you request in chat or through dashboard filters. This data is indexed locally within your user profile database table in SQLite to allow the recommendation generation engine to query matching deals. We do not transmit clear-text search terms externally unless authorized.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion-item bg-transparent border-purple-thin text-light mt-2">
+                                                <h2 class="accordion-header" id="headingTwo">
+                                                    <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                        2. Data security standards & payment compliance
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#privacyPolicyAccordion">
+                                                    <div class="accordion-body text-secondary text-sm">
+                                                        All user passwords are encrypted using state-of-the-art hashing algorithms (Werkzeug security helper module) before storage. Credit card payment actions process transaction reference numbers via internal mock gateways, ensuring actual credit card CVVs and numbers are never persisted in log files or session dumps.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion-item bg-transparent border-purple-thin text-light mt-2">
+                                                <h2 class="accordion-header" id="headingThree">
+                                                    <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                        3. Right to opt-out and erase tracking nodes
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#privacyPolicyAccordion">
+                                                    <div class="accordion-body text-secondary text-sm">
+                                                        Under GDPR rules, standard customers can withdraw marketing personalization agreements and opt-out of cookie tracking nodes. Opting out will reset recommendation queries back to static general items and will suspend AI matching parameters.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 7: Saved Payment Cards -->
+                    <div class="tab-pane fade" id="pane-cards" role="tabpanel">
+                        <div class="card glass-card p-4">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <h4 class="text-white fw-bold mb-1"><i class="bi bi-credit-card-2-front text-info me-2"></i>Saved Cards & Wallets</h4>
+                                        <p class="text-secondary text-sm mb-0">Manage your saved credit/debit cards for quick checkout during shopping.</p>
+                                    </div>
+                                    <button type="button" class="btn btn-glow-primary py-2 px-3" data-bs-toggle="modal" data-bs-target="#addCardModal">
+                                        <i class="bi bi-plus-lg me-1"></i>Add New Card
+                                    </button>
+                                </div>
+
+                                <!-- Cards List -->
+                                <div class="row g-4" id="cards-container">
+                                    <div class="col-12 text-center py-4 text-secondary">
+                                        Loading saved cards...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Pane 5: Download App -->
+                    <div class="tab-pane fade" id="pane-download" role="tabpanel">
+                        <div class="card glass-card p-4 text-center">
+                            <div class="card-body">
+                                <i class="bi bi-phone-vibrate text-info display-4 mb-3"></i>
+                                <h4 class="text-white fw-bold mb-2">Get the AI Shopping Agent App</h4>
+                                <p class="text-secondary mb-4 mx-auto" style="max-width: 500px;">Access your personalized shopping feed, track current shipping orders, and chat with the agent on the go.</p>
+                                
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="#" class="btn btn-glow-outline px-4 py-2.5 d-inline-flex align-items-center">
+                                        <i class="bi bi-apple me-2 fs-4 text-info"></i>
+                                        <div class="text-start">
+                                            <small class="text-secondary d-block" style="font-size: 9px; text-transform: uppercase;">Download on</small>
+                                            <span class="text-white fw-semibold">App Store</span>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="btn btn-glow-primary px-4 py-2.5 d-inline-flex align-items-center">
+                                        <i class="bi bi-google-play me-2 fs-4"></i>
+                                        <div class="text-start">
+                                            <small class="text-secondary d-block" style="font-size: 9px; text-transform: uppercase;">Get it on</small>
+                                            <span class="text-white fw-semibold">Google Play</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-danger-glow text-light" style="background: rgba(15, 12, 27, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(220, 53, 69, 0.3);">
+                <div class="modal-header border-bottom border-purple-thin">
+                    <h5 class="modal-title text-danger fw-bold" id="deleteAccountModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Permanent Account Erasure
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger bg-danger-glow border-0 text-danger text-sm mb-3">
+                        <i class="bi bi-shield-exclamation me-2"></i>Warning: This action is destructive and cannot be undone.
+                    </div>
+                    <p class="text-secondary text-sm">To verify identity and confirm permanent erasure, please type your current password below:</p>
+                    
+                    <div id="delete-profile-error" class="alert alert-danger d-none text-xs" role="alert"></div>
+                    
+                    <div class="mb-3">
+                        <label for="delete-profile-password" class="form-label text-secondary">Current Password</label>
+                        <input type="password" class="form-control glass-input" id="delete-profile-password" required placeholder="Enter password to confirm account deletion">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-glow-outline px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-glow-danger px-4" id="btn-confirm-delete-account">
+                        <i class="bi bi-trash-fill me-1"></i>Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Address Modal -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-purple-thin text-light" style="background: rgba(15, 12, 27, 0.95); backdrop-filter: blur(10px);">
+                <div class="modal-header border-bottom border-purple-thin">
+                    <h5 class="modal-title text-white fw-bold" id="addAddressModalLabel">
+                        <i class="bi bi-geo-alt text-info me-2"></i>Add Shipping Address
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="add-address-error" class="alert alert-danger d-none text-xs" role="alert"></div>
+                    <form id="add-address-form">
+                        <div class="mb-3">
+                            <label for="address-label" class="form-label text-secondary">Address Tag/Label</label>
+                            <input type="text" class="form-control glass-input" id="address-label" required placeholder="e.g. Home, Office, Parents">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address-recipient" class="form-label text-secondary">Recipient Full Name</label>
+                            <input type="text" class="form-control glass-input" id="address-recipient" required placeholder="e.g. John Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address-phone" class="form-label text-secondary">Contact Phone Number</label>
+                            <input type="tel" class="form-control glass-input" id="address-phone" required placeholder="e.g. +91 98765 43210">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address-text" class="form-label text-secondary">Complete Address</label>
+                            <textarea class="form-control glass-input" id="address-text" rows="3" required placeholder="Enter house no, street, locality, pincode"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-glow-outline px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="add-address-form" class="btn btn-glow-primary px-4" id="btn-save-address">
+                        Save Address
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Payment Card Modal -->
+    <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-purple-thin text-light" style="background: rgba(15, 12, 27, 0.95); backdrop-filter: blur(10px);">
+                <div class="modal-header border-bottom border-purple-thin">
+                    <h5 class="modal-title text-white fw-bold" id="addCardModalLabel">
+                        <i class="bi bi-credit-card text-info me-2"></i>Add Saved Payment Card
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="add-card-error" class="alert alert-danger d-none text-xs" role="alert"></div>
+                    <form id="add-card-form">
+                        <div class="mb-3">
+                            <label for="card-holder" class="form-label text-secondary">Cardholder Name</label>
+                            <input type="text" class="form-control glass-input text-uppercase" id="card-holder" required placeholder="e.g. DEFAULT USER">
+                        </div>
+                        <div class="mb-3">
+                            <label for="card-number" class="form-label text-secondary">Card Number</label>
+                            <input type="text" class="form-control glass-input font-monospace" id="card-number" required maxlength="19" placeholder="4321 0987 6543 2109">
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="card-expiry" class="form-label text-secondary">Expiry Date</label>
+                                <input type="text" class="form-control glass-input font-monospace text-center" id="card-expiry" required maxlength="5" placeholder="MM/YY">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="card-cvv" class="form-label text-secondary">CVV / CVN</label>
+                                <input type="password" class="form-control glass-input font-monospace text-center" id="card-cvv" required maxlength="3" placeholder="•••">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-glow-outline px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="add-card-form" class="btn btn-glow-primary px-4" id="btn-save-card">
+                        Save Card
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phone Verification (OTP) Modal -->
+    <div class="modal fade" id="verifyPhoneModal" tabindex="-1" aria-labelledby="verifyPhoneModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content glass-card border-purple-thin text-light" style="background: rgba(15, 12, 27, 0.95); backdrop-filter: blur(10px);">
+                <div class="modal-header border-bottom border-purple-thin">
+                    <h5 class="modal-title text-white fw-bold" id="verifyPhoneModalLabel">
+                        <i class="bi bi-shield-check text-info me-2"></i>OTP Validation
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="text-secondary text-sm mb-3">A mock verification passcode was sent. Please type **1234** below to confirm identity:</p>
+                    <div id="verify-phone-error" class="alert alert-danger d-none text-xs" role="alert"></div>
+                    <form id="verify-phone-form">
+                        <div class="mb-3 mx-auto" style="max-width: 150px;">
+                            <input type="text" class="form-control glass-input text-center font-monospace fs-4 tracking-widest" id="otp-input" required maxlength="4" placeholder="••••">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center">
+                    <button type="button" class="btn btn-glow-outline btn-sm px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="verify-phone-form" class="btn btn-glow-primary btn-sm px-4" id="btn-confirm-otp">
+                        Confirm Code
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 mt-auto border-top border-purple-thin text-secondary" style="background: rgba(15, 12, 27, 0.9); margin-top: 5rem !important;">
+        <div class="container">
+            <p class="mb-0 text-sm">© 2026 AI-Powered Shopping Assistant Agent. Crafted with Flask, SQLite & Bootstrap 5.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="mobile-bottom-nav d-lg-none">
+        <a href="dashboard.html" class="nav-item-bottom" id="btn-bottom-home">
+            <i class="bi bi-house-door"></i>
+            <span>Home</span>
+        </a>
+        <a href="profile.html" class="nav-item-bottom active" id="btn-bottom-profile">
+            <i class="bi bi-person"></i>
+            <span>You</span>
+        </a>
+        <a href="chatbot.html" class="nav-item-bottom" id="btn-bottom-assistant">
+            <i class="bi bi-layers"></i>
+            <span>More</span>
+        </a>
+        <a href="profile.html#pane-wishlist" class="nav-item-bottom" id="btn-bottom-cart">
+            <div class="position-relative d-inline-block">
+                <i class="bi bi-cart"></i>
+                <span class="badge rounded-circle bg-danger position-absolute top-0 start-100 translate-middle text-xs px-1" id="bottom-cart-badge" style="font-size: 8px; transform: translate(-30%, -30%) !important;">0</span>
+            </div>
+            <span>Cart</span>
+        </a>
+        <a href="#" class="nav-item-bottom" id="btn-bottom-menu" data-bs-toggle="offcanvas" data-bs-target="#mobileMenuDrawer">
+            <i class="bi bi-list"></i>
+            <span>Menu</span>
+        </a>
+    </div>
+
+    <!-- Mobile Offcanvas Menu Drawer -->
+    <div class="offcanvas offcanvas-bottom glass-card border-purple-thin text-light" tabindex="-1" id="mobileMenuDrawer" style="height: auto; border-top-left-radius: 20px; border-top-right-radius: 20px; background: rgba(15, 12, 27, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--accent-purple);">
+        <div class="offcanvas-header border-bottom border-purple-thin">
+            <h5 class="offcanvas-title fw-bold text-white"><i class="bi bi-grid-fill text-info me-2"></i>Quick Menu</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body py-4">
+            <div class="row g-3 text-center">
+                <div class="col-4">
+                    <a href="dashboard.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-house-door-fill text-info fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Home</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="profile.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-person-fill text-purple fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Profile</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="chatbot.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-chat-right-dots-fill text-warning fs-3 d-block mb-1"></i>
+                        <span class="text-xs">AI Assistant</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="products.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark d-none" id="mobile-menu-admin-link">
+                        <i class="bi bi-box-seam-fill text-success fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Inventory</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="#" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark" id="mobile-menu-logout-btn">
+                        <i class="bi bi-box-arrow-right text-danger fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Custom Main JS -->
+    <script src="main.js"></script>
+</body>
+</html>

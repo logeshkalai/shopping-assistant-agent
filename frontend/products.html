@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Powered Shopping Assistant Agent - Catalog Management">
+    <title>Manage Products - AI Shopping Assistant</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom Premium Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-glass sticky-top">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-glow" href="dashboard.html">
+                <i class="bi bi-robot me-2"></i>AI Shopping Agent
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-glow" href="dashboard.html">
+                            <i class="bi bi-house-door-fill me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="nav-manage-products">
+                        <a class="nav-link nav-link-glow active" href="products.html">
+                            <i class="bi bi-box-seam-fill me-1"></i>Manage Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-glow" href="chatbot.html">
+                            <i class="bi bi-chat-right-dots-fill me-1"></i>AI Assistant
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="nav-profile-link">
+                        <a class="nav-link nav-link-glow" href="profile.html">
+                            <i class="bi bi-person-fill me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div id="nav-user" class="d-flex align-items-center gap-3 d-none">
+                        <a href="profile.html" class="text-light text-decoration-none nav-link-glow">
+                            <i class="bi bi-person-circle me-1 text-info"></i>Hi, <span id="current-user-name" class="fw-bold">Guest</span>
+                        </a>
+                        <button id="logout-btn" class="btn btn-sm btn-glow-outline">
+                            <i class="bi bi-box-arrow-right me-1"></i>Logout
+                        </button>
+                    </div>
+                    <div id="nav-guest" class="d-flex gap-2">
+                        <a href="login.html" class="btn btn-sm btn-glow-outline">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-sm btn-glow-primary">
+                            <i class="bi bi-person-plus-fill me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="row">
+            <!-- Form to Add/Update Product -->
+            <div class="col-lg-4 mb-4">
+                <div class="card glass-card p-3 sticky-top" style="top: 90px; z-index: 1000;">
+                    <div class="card-body">
+                        <h5 class="card-title text-white mb-4" id="form-title">
+                            <i class="bi bi-plus-circle-fill text-info me-2"></i>Add New Product
+                        </h5>
+                        <form id="product-crud-form">
+                            <input type="hidden" id="prod-id" value="">
+                            
+                            <div class="mb-3">
+                                <label for="prod-name" class="form-label text-secondary">Product Name</label>
+                                <input type="text" class="form-control glass-input" id="prod-name" placeholder="e.g. Dell XPS 15" required>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label for="prod-category" class="form-label text-secondary">Category</label>
+                                    <select id="prod-category" class="form-select glass-input glass-select" required>
+                                        <option value="laptop">Laptop</option>
+                                        <option value="phone">Phone</option>
+                                        <option value="headphone">Headphone</option>
+                                        <option value="monitor">Monitor</option>
+                                        <option value="keyboard">Keyboard</option>
+                                        <option value="mouse">Mouse</option>
+                                        <option value="sports">Sports Equipment</option>
+                                        <option value="food">Food & Groceries</option>
+                                        <option value="appliance">Home Appliance</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label for="prod-brand" class="form-label text-secondary">Brand</label>
+                                    <input type="text" class="form-control glass-input" id="prod-brand" placeholder="e.g. Dell" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label for="prod-price" class="form-label text-secondary">Price (₹)</label>
+                                    <input type="number" step="0.01" class="form-control glass-input" id="prod-price" placeholder="45000" required>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label for="prod-rating" class="form-label text-secondary">Rating (0-5)</label>
+                                    <input type="number" step="0.1" min="0" max="5" class="form-control glass-input" id="prod-rating" placeholder="4.5" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="prod-stock" class="form-label text-secondary">Stock Quantity</label>
+                                <input type="number" class="form-control glass-input" id="prod-stock" placeholder="10" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="prod-desc" class="form-label text-secondary">Description</label>
+                                <textarea class="form-control glass-input" id="prod-desc" rows="3" placeholder="Specs, features, processor detail..." required></textarea>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-glow-primary flex-grow-1" id="save-btn">
+                                    Save Product
+                                </button>
+                                <button type="button" class="btn btn-glow-outline d-none" id="cancel-btn">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products List Table -->
+            <div class="col-lg-8">
+                <div class="card glass-card p-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title text-white mb-0">Product Inventory</h5>
+                            <div class="input-group" style="width: 250px;">
+                                <input type="text" id="table-search" class="form-control glass-input py-1" placeholder="Filter inventory...">
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover align-middle border-purple-thin">
+                                <thead>
+                                    <tr class="text-secondary">
+                                        <th>ID</th>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Rating</th>
+                                        <th>Stock</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-tbody">
+                                    <!-- Rows dynamically rendered here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 mt-auto border-top border-purple-thin text-secondary" style="background: rgba(15, 12, 27, 0.9); margin-top: 5rem !important;">
+        <div class="container">
+            <p class="mb-0 text-sm">© 2026 AI-Powered Shopping Assistant Agent. Crafted with Flask, SQLite & Bootstrap 5.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="mobile-bottom-nav d-lg-none">
+        <a href="dashboard.html" class="nav-item-bottom" id="btn-bottom-home">
+            <i class="bi bi-house-door"></i>
+            <span>Home</span>
+        </a>
+        <a href="profile.html" class="nav-item-bottom" id="btn-bottom-profile">
+            <i class="bi bi-person"></i>
+            <span>You</span>
+        </a>
+        <a href="chatbot.html" class="nav-item-bottom" id="btn-bottom-assistant">
+            <i class="bi bi-layers"></i>
+            <span>More</span>
+        </a>
+        <a href="profile.html#pane-wishlist" class="nav-item-bottom" id="btn-bottom-cart">
+            <div class="position-relative d-inline-block">
+                <i class="bi bi-cart"></i>
+                <span class="badge rounded-circle bg-danger position-absolute top-0 start-100 translate-middle text-xs px-1" id="bottom-cart-badge" style="font-size: 8px; transform: translate(-30%, -30%) !important;">0</span>
+            </div>
+            <span>Cart</span>
+        </a>
+        <a href="#" class="nav-item-bottom" id="btn-bottom-menu" data-bs-toggle="offcanvas" data-bs-target="#mobileMenuDrawer">
+            <i class="bi bi-list"></i>
+            <span>Menu</span>
+        </a>
+    </div>
+
+    <!-- Mobile Offcanvas Menu Drawer -->
+    <div class="offcanvas offcanvas-bottom glass-card border-purple-thin text-light" tabindex="-1" id="mobileMenuDrawer" style="height: auto; border-top-left-radius: 20px; border-top-right-radius: 20px; background: rgba(15, 12, 27, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--accent-purple);">
+        <div class="offcanvas-header border-bottom border-purple-thin">
+            <h5 class="offcanvas-title fw-bold text-white"><i class="bi bi-grid-fill text-info me-2"></i>Quick Menu</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body py-4">
+            <div class="row g-3 text-center">
+                <div class="col-4">
+                    <a href="dashboard.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-house-door-fill text-info fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Home</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="profile.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-person-fill text-purple fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Profile</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="chatbot.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark">
+                        <i class="bi bi-chat-right-dots-fill text-warning fs-3 d-block mb-1"></i>
+                        <span class="text-xs">AI Assistant</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="products.html" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark d-none" id="mobile-menu-admin-link">
+                        <i class="bi bi-box-seam-fill text-success fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Inventory</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="#" class="text-decoration-none text-light d-block p-2 rounded hover-bg-dark" id="mobile-menu-logout-btn">
+                        <i class="bi bi-box-arrow-right text-danger fs-3 d-block mb-1"></i>
+                        <span class="text-xs">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Custom Main JS -->
+    <script src="main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('inventory-tbody');
+            const form = document.getElementById('product-crud-form');
+            const formTitle = document.getElementById('form-title');
+            const prodIdInput = document.getElementById('prod-id');
+            const nameInput = document.getElementById('prod-name');
+            const categoryInput = document.getElementById('prod-category');
+            const brandInput = document.getElementById('prod-brand');
+            const priceInput = document.getElementById('prod-price');
+            const ratingInput = document.getElementById('prod-rating');
+            const stockInput = document.getElementById('prod-stock');
+            const descInput = document.getElementById('prod-desc');
+            const saveBtn = document.getElementById('save-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+            const tableSearch = document.getElementById('table-search');
+
+            let products = [];
+
+            async function loadInventory() {
+                try {
+                    const res = await fetch('/api/products');
+                    products = await res.json();
+                    renderInventory(products);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            function renderInventory(items) {
+                tbody.innerHTML = '';
+                if (items.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-secondary">No products found.</td></tr>';
+                    return;
+                }
+
+                items.forEach(p => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><code>#${p.product_id}</code></td>
+                        <td>
+                            <span class="d-block fw-bold text-white">${p.name}</span>
+                            <small class="text-muted">${p.brand}</small>
+                        </td>
+                        <td><span class="badge-category">${p.category}</span></td>
+                        <td class="text-info fw-bold">₹${p.price.toLocaleString('en-IN')}</td>
+                        <td>${p.rating} ★</td>
+                        <td><span class="badge ${p.stock > 0 ? 'bg-success-glow text-success' : 'bg-danger-glow text-danger'}">${p.stock} units</span></td>
+                        <td class="text-end">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-info edit-btn" data-id="${p.product_id}">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${p.product_id}">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                        editProduct(id);
+                    });
+                });
+
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                        if (confirm("Are you sure you want to delete this product?")) {
+                            deleteProduct(id);
+                        }
+                    });
+                });
+            }
+
+            function editProduct(id) {
+                const p = products.find(prod => prod.product_id === id);
+                if (!p) return;
+
+                prodIdInput.value = p.product_id;
+                nameInput.value = p.name;
+                categoryInput.value = p.category;
+                brandInput.value = p.brand;
+                priceInput.value = p.price;
+                ratingInput.value = p.rating;
+                stockInput.value = p.stock;
+                descInput.value = p.description || '';
+
+                formTitle.innerHTML = `<i class="bi bi-pencil-fill text-warning me-2"></i>Edit Product #${id}`;
+                saveBtn.textContent = 'Update Product';
+                cancelBtn.classList.remove('d-none');
+            }
+
+            function resetForm() {
+                prodIdInput.value = '';
+                form.reset();
+                formTitle.innerHTML = `<i class="bi bi-plus-circle-fill text-info me-2"></i>Add New Product`;
+                saveBtn.textContent = 'Save Product';
+                cancelBtn.classList.add('d-none');
+            }
+
+            cancelBtn.addEventListener('click', resetForm);
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = prodIdInput.value;
+                
+                const payload = {
+                    name: nameInput.value,
+                    category: categoryInput.value,
+                    brand: brandInput.value,
+                    price: parseFloat(priceInput.value),
+                    rating: parseFloat(ratingInput.value),
+                    stock: parseInt(stockInput.value),
+                    description: descInput.value
+                };
+
+                const url = id ? `/api/products/${id}` : '/api/products';
+                const method = id ? 'PUT' : 'POST';
+
+                try {
+                    const res = await fetch(url, {
+                        method: method,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        resetForm();
+                        loadInventory();
+                    } else {
+                        alert(data.message);
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+
+            async function deleteProduct(id) {
+                try {
+                    const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+                    const data = await res.json();
+                    if (data.success) {
+                        loadInventory();
+                    } else {
+                        alert(data.message);
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            if (tableSearch) {
+                tableSearch.addEventListener('input', (e) => {
+                    const term = e.target.value.toLowerCase();
+                    const filtered = products.filter(p => 
+                        p.name.toLowerCase().includes(term) || 
+                        p.brand.toLowerCase().includes(term) ||
+                        p.category.toLowerCase().includes(term)
+                    );
+                    renderInventory(filtered);
+                });
+            }
+
+            loadInventory();
+        });
+    </script>
+</body>
+</html>
